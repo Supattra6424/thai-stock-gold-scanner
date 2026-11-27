@@ -1,0 +1,36 @@
+name: Daily Thai Stock & Gold Scan
+
+on:
+  schedule:
+    # Run at 10:30 UTC = 17:30 Thai Time (Monday to Friday)
+    - cron: '30 10 * * 1-5'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Gold Price Check
+        run: python cli.py --gold
+
+      - name: Run Thai Stock Scan (SET50)
+        run: python cli.py --scan all --universe set50 --export set50_scan_result.csv
+
+      - name: Upload Daily Scan Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-scan-results
+          path: set50_scan_result.csv

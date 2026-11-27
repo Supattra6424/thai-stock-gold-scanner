@@ -1,0 +1,19 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local cache & database
+stock_cache.db
+*.db
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
